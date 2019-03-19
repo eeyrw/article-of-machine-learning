@@ -1,0 +1,55 @@
+\documentclass[12pt,a4paper,draft]{ctexart}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage[left=2.70cm, right=2.70cm, top=2.70cm, bottom=2.70cm]{geometry}
+\title{贝叶斯线性回归的学习研究}
+\author{Yuan}
+\date{\today}
+\begin{document}
+
+\maketitle
+\begin{abstract}
+摘要摘要
+\end{abstract}	
+https://www.cnblogs.com/jingwhale/p/4250296.html
+\[ p(w|D)=\frac{p(D|w)p(w)}{\int p(D|w)p(w)dw} \]
+\section{原理}
+基于上面的讨论，这里就可以引出本文的核心内容：贝叶斯线性回归。贝叶斯线性回归不仅可以解决极大似然估计中存在的过拟合的问题，而且，它对数据样本的利用率是100\%，仅仅使用训练样本就可以有效而准确的确定模型的复杂度。
+
+这里面对的模型是线性回归模型，其详细的介绍可以参见前面的文章《线性回归》,线性回归模型是一组输入变量x的基函数的线性组合，在数学上其形式如下： 
+\[ y(x,w)=w_{0}+\sum_{j=1}^{M}\omega_{j}\phi_{j}(x) \]
+这里$ \phi_{j}(x) $就是前面提到的基函数，总共的基函数的数目为M个，如果定义$ \phi_{0}(x)=1 $的话，那个上面的式子就可以简单的表示为： 
+\[ y(x,w)=\sum_{j=0}^{M}\omega_{j}\phi_{j}(x)=w^T\phi(x)\]
+\[ w=(w_{0},w_{1},w_{2},...,w_{M})\]
+\[ \phi=(\phi_{0},\phi_{1},\phi_{2},...,\phi_{M}) \]
+
+则线性模型的概率表示如下：
+\[ p(t|x,w,\beta)=N(t|y(x,w),\beta^{-1}I) \]
+假设参数w满足高斯分布，这是一个先验分布：
+
+\[ p(w)=N(w|0,\alpha^{-1}I) \]
+一般来说，我们称p(w)为共轭先验(conjugate prior)。这里t是x对应的目标输出，$ \beta^{-1} $和$ \alpha^{-1} $分别对应于样本集合和w的高斯分布的方差，w是参数，
+
+那么，线性模型的对数后验概率函数：
+
+\[ ln p(\theta|D)=ln p(w|T)=-\frac{\beta}{2}\sum_{n=1}^N\{y(x_{n},w)-t_{n}\}^2+\frac{\alpha}{2}w^Tw+const \]
+这里T是数据样本的目标值向量，$ T=\{t_1,t_2,...,t_n\} $，const是和参数w无关的量。关于这个式子的具体推导，可参见前面的文章《多项式回归》。
+\section{优劣分析}
+\noindent \textbf{优点：} 
+\begin{itemize}
+	\item 贝叶斯回归对数据有自适应能力，可以重复的利用实验数据，并防止过拟合 
+	\item 贝叶斯回归可以在估计过程中引入正则项 
+\end{itemize}
+\noindent \textbf{缺点：} 
+\begin{itemize}
+	\item 贝叶斯回归的学习过程开销太大
+\end{itemize}
+
+
+\section{主要用途}
+
+
+\end{document}
