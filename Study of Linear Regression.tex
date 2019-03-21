@@ -12,7 +12,7 @@
 
 \maketitle
 \begin{abstract}
-摘要摘要
+本文就机器学习中常用的线性回归方法进行一般的论述。
 \end{abstract}	
 https://www.cnblogs.com/jingwhale/p/4250296.html
 \section{原理}
@@ -41,7 +41,7 @@ b
 同时令：
 \[ \mathbf{y}^T=(y_1,y_2,\cdots,y_m) \]
 损失函数是： 
-\[ J(\mathbf{\hat{w}})=\min_{\mathbf{\hat{w}}}\left \| \mathbf{X}\mathbf{\hat{w}}-y \right \|^{2} \]
+\[ J(\mathbf{\hat{w}})=\min_{\mathbf{\hat{w}}}\left \| \mathbf{X}\mathbf{\hat{w}}-\mathbf{y} \right \|^{2} \]
 最小乘法的证明
 对于上面的损失函数而言，J(w)显然是非负的，其去最小值的充要条件就是$ \left \| Xw-y \right \|^{2} $的倒数为0时的w的取值，从矩阵的角度来写这个式子： 
 \[ \left \| Xw-y \right \|^{2}=(Xw-y)^T(Xw-y) \]
