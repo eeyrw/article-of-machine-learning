@@ -1,0 +1,91 @@
+\documentclass[12pt,a4paper,draft]{ctexart}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage[left=2.70cm, right=2.70cm, top=2.70cm, bottom=2.70cm]{geometry}
+\title{线性回归的学习研究}
+\author{Yuan}
+\date{\today}
+\begin{document}
+
+\maketitle
+\begin{abstract}
+摘要摘要
+\end{abstract}	
+https://www.cnblogs.com/jingwhale/p/4250296.html
+\section{原理}
+线性回归是指给定数据集$ D=\{(\mathbf{x}_{1},y_{1}),(\mathbf{x}_{2},y_{2}),...,(\mathbf{x}_{m},y_{m})\} $，其中$\mathbf{x}_i=(x_{i1};x_{i2};\\...;x_{id})$，$y_{i}\in\mathbb{R} $。线性回归试图学得$f(\mathbf{x}_{i})=\mathbf{w}^T\mathbf{x}_{i}+b$，使得$f(\mathbf{x}_{i})$接近$ y_{i}$，$\mathbf{w}$及$b$为参数，$\mathbf{w}^T=(w_1,w_2,...,w_d)$。
+\subsection{最小二乘法（Ordinary Least Squares）}
+为了便于计算，讲w和b合并改写为向量：
+\[ \hat{\mathbf{w}}=\begin{pmatrix}
+\mathbf{w} \\ 
+b
+\end{pmatrix}  \]
+同时把数据集D表示为一个m*(d+1)大小的矩阵X，其中每一行对应一个实例，该行d个元素对应实例的d个属性值，最后一个元素恒为1：
+\[ 
+\mathbf{X}=
+\begin{pmatrix}
+	x_{11} & x_{12} & \cdots & x_{1d} & 1 \\ 
+	x_{21} & x_{22} & \cdots & x_{2d} & 1 \\ 
+	\vdots & \vdots & \ddots & \vdots & \vdots \\ 
+	x_{m1} & x_{m2} & \cdots & x_{md} & 1
+\end{pmatrix} =\begin{pmatrix}
+\mathbf{x_1}^T & 1 \\ 
+\mathbf{x_2}^T & 1 \\ 
+\vdots & \vdots \\ 
+\mathbf{x_m}^T & 1
+\end{pmatrix} 
+\]
+同时令：
+\[ \mathbf{y}^T=(y_1,y_2,\cdots,y_m) \]
+损失函数是： 
+\[ J(\mathbf{\hat{w}})=\min_{\mathbf{\hat{w}}}\left \| \mathbf{X}\mathbf{\hat{w}}-y \right \|^{2} \]
+最小乘法的证明
+对于上面的损失函数而言，J(w)显然是非负的，其去最小值的充要条件就是$ \left \| Xw-y \right \|^{2} $的倒数为0时的w的取值，从矩阵的角度来写这个式子： 
+\[ \left \| Xw-y \right \|^{2}=(Xw-y)^T(Xw-y) \]
+得到其关于$ \mathbf{w} $的导数为： 
+\[ X^T(Xw-y) + X^T(Xw-y)=0 \]
+即： 
+\[ w=(X^TX)^{-1}X^Ty \]
+这里，我们将\[ X^+\equiv(X^TX)^{-1}X^T \]定义为X的伪逆矩阵。
+
+这个是一个非常好的结果，它说明使用最小二乘法，从数学上是可以直接通过公式来求解出参数w的。
+
+注意：最小二乘法对$ \omega $的估计，是基于模型中变量之间相互独立的基本假设的，即输入向量x中的任意两项$ x_{i} $和$ x_{j} $之间是相互独立的。如果输入矩阵X中存在线性相关或者近似线性相关的列，那么输入矩阵X就会变成或者近似变成奇异矩阵（singular matrix）。这是一种病态矩阵，矩阵中任何一个元素发生一点变动，整个矩阵的行列式的值和逆矩阵都会发生巨大变化。这将导致最小二乘法对观测数据的随机误差极为敏感，进而使得最后的线性模型产生非常大的方差，这个在数学上称为多重共线性（multicollinearity）。在实际数据中，变量之间的多重共线性是一个非常普遍的现象，其产生机理及相关解决方案在“特征选择和评估”中有介绍。
+\subsection{在线学习算法}
+像OLS算法这种，一次性就将训练数据集中的N个数据全部都用于$ p(t|X,w,\sigma^2) $的估计中，然后通过求导得到参数的估计结果。这种算法的模型，称为批处理技术（Batch techniques）,其主要缺点就在于，面对大的数据集的时候，其计算成本会非常的大。
+
+当数据集特别大的时候，这种批处理技术就不再适用，就有一种称为序列学习算法（Sequential learning），也叫作在线算法（on-line algorithms）的算法得到了广泛的应用。
+
+说得简单一点，序列学习算法就是将数据的样本点，看成在时间上有序的，即，数据集合不是一次性得到全部的数据，而是一个样本一个样本采集得到的。那么，在训练算法的时候，也就可以一个样本一个样本的输入的训练算法的中，利用新的样本不断的改进模型，进而达到学习的目的。
+
+梯度下降法
+有前面可以知道，线性回归的损失函数为:
+
+\[ J(w)=\min_{w}\left \| Xw-y \right \|^{2} \]
+其关于参数w梯度为：
+
+\[ \nabla J(w)=2X^T(Xw-y) \]
+梯度下降法就是：
+
+\[ w_{k} = w_{k-1}- \rho_{k} \nabla J(w) \]
+通过迭代，求得$ w_{k} $
+随机梯度下降法
+随机梯度下降法，就是这里要说的在线学习算法，它不像上面的梯度下降法，每次迭代都使用了全部的数据集，这里每次迭代仅仅使用一个样本：
+
+\[ w_{k} = w_{k-1}- \rho_{k} x_{k}(x_{k}^Tw_{k-1} - y_{k}) \]
+这里需要说明的是，$ \rho_{k} $ 必须满足两个条件：
+
+\[ \sum_{k=1}^{\infty}\rho_{k}\to\infty \\
+\sum_{k=1}^{\infty}\rho_{k}^2 < \infty \]
+这个过程，其实是根据新的输入样本，$ 对w_{k} $的一个不断的修正的过程，一般来说，我们会把$ \rho_{k}$后面的式子称为修正量。
+
+折两个条件，保证了在迭代过程中估计的修正值，会趋近于零。因此，对于足够大的k而言，迭代会突然停止，但是，由于有第一个条件的存在，这个停止不会发生的太早，并且不会再离结果非常远的时候，就停止了迭代。上面的第二个条件保证了，对于变量的随机性噪声，噪声的累积保持有限。
+
+\section{优劣分析}
+\section{主要用途}
+
+
+\end{document}
