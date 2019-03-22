@@ -64,10 +64,10 @@ b
 \[ \mathbf{\hat{w}}_{k} = \mathbf{\hat{w}}_{k-1}- \eta \nabla J(\mathbf{\hat{w}_{k-1}}) \]
 式中$\eta$为学习率，控制下降的速度，参数$ k $为迭代轮数。通过不停迭代，求得$ \mathbf{\hat{w}}_{k} $。
 \paragraph{随机梯度下降法}
-不同于上述的梯度下降法，每次迭代都使用了全部的数据集，这里每次迭代仅仅使用一个样本：
-\[\mathbf{\hat{w}}_{k} = \mathbf{\hat{w}}_{k-1}- \eta \bar{J}(\mathbf{\hat{w}_{k-1}})\]  
-\[\bar{J}(\mathbf{\hat{w}})=2 \bar{\textbf{x}}_{r}^T(\bar{\textbf{x}}_{r}\mathbf{\hat{w}}_{k-1} - y_{r}) \] 
-式中$\eta$同样为学习率，参数$ k $为迭代轮数。$ \bar{J}(\mathbf{\hat{w}}) $为单样本情况下的损失函数的梯度。由于每次更新只用一个样本更新$ \mathbf{\hat{w}} $，故之前梯度中的矩阵$ \textbf{X} $退化为一个行向量，向量$ \textbf{y} $退化为标量。定义集合$ N=\{1,2,\cdots,m\} $，$ m $为数据集$ D $的样本个数，$ r $从$ N $从中随机选择。$ \bar{\textbf{x}}_{r} $为从矩阵$ \textbf{X} $中选出的第$ r $行的行向量，即$ \bar{\textbf{x}}_{r}=\textbf{X}_{r,*} $。同样地，$ y_{r} $也为向量$ \textbf{y} $的第$ r $行的标量。
+不同于上述的梯度下降法，每次迭代都使用了全部的数据集，该算法每次迭代仅仅使用一个样本。该样本从样本集合中随机选取，故名为随机梯度下降法：
+\[\mathbf{\hat{w}}_{k} = \mathbf{\hat{w}}_{k-1}- \eta \nabla\bar{J}(\mathbf{\hat{w}_{k-1}})\]  
+\[\nabla\bar{J}(\mathbf{\hat{w}})=2 \bar{\textbf{x}}_{r}(\bar{\textbf{x}}_{r}^T\mathbf{\hat{w}} - y_{r}) \] 
+式中$\eta$同样为学习率，参数$ k $为迭代轮数。$ \bar{J}(\mathbf{\hat{w}}) $为单样本情况下的损失函数的梯度。由于每次更新只用一个样本更新$ \mathbf{\hat{w}} $，故之前梯度中的矩阵$ \textbf{X} $退化为一个行向量，向量$ \textbf{y} $退化为标量。定义集合$ N=\{1,2,\cdots,m\} $，$ m $为数据集$ D $的样本个数，$ r $从$ N $从中随机选择。$ \bar{\textbf{x}}_{r} $为从矩阵$ \textbf{X} $中选出的第$ r $行的行向量的转置，即$ \bar{\textbf{x}}_{r}=\textbf{X}_{r,*}^T $。同样地，$ y_{r} $也为向量$ \textbf{y} $的第$ r $行的标量。
 
 
 \end{document}
