@@ -4,10 +4,11 @@
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{graphicx}
-\usepackage[left=3.0cm, right=3.0cm, top=3.5cm, bottom=2.70cm]{geometry}
+\usepackage{bm}
+%\usepackage[left=3.0cm, right=3.0cm, top=3.5cm, bottom=2.70cm]{geometry}
 \title{线性回归的学习研究}
 \author{Yuan}
-\date{\today}
+\date{\small\today}
 \begin{document}
 
 \maketitle
@@ -15,41 +16,41 @@
 本文就机器学习中常用的线性回归方法中经典的最小二乘法和用于处理大规模数据问题在线学习算法进行论述。
 \end{abstract}	
 \section{问题定义}
-线性回归是指给定数据集 $ D=\{(\mathbf{x}_{1},y_{1}),(\mathbf{x}_{2},y_{2}),\cdots,(\mathbf{x}_{m},y_{m})\} $，其中$\mathbf{x}_i$ 是维数为$ d $的向量，即$\mathbf{x}_i=(x_{i1};x_{i2};\cdots;x_{id})$，$y_{i}\in\mathbb{R} $。线性回归试图学得$f(\mathbf{x}_{i})=\mathbf{w}^T\mathbf{x}_{i}+b$，使得$f(\mathbf{x}_{i})$接近$ y_{i}$，$\mathbf{w}$及$b$为参数，$\mathbf{w}^T=(w_1,w_2,\cdots,w_d)$。
+线性回归是指给定数据集 $ D=\{(\bm{x}_{1},y_{1}),(\bm{x}_{2},y_{2}),\cdots,(\bm{x}_{m},y_{m})\} $，其中$\bm{x}_i$ 是维数为$ d $的向量，即$\bm{x}_i=(x_{i1};x_{i2};\cdots;x_{id})$，$y_{i}\in\mathbb{R} $。线性回归试图学得$f(\bm{x}_{i})=\bm{w}^T\bm{x}_{i}+b$，使得$f(\bm{x}_{i})$接近$ y_{i}$，$\bm{w}$及$b$为参数，$\bm{w}^T=(w_1,w_2,\cdots,w_d)$。
 \section{学习算法}
 \subsection{最小二乘法}
 最小二乘法是解决线性回归问题的经典方法，它通过最小化误差的平方和寻找数据的最佳函数匹配。为了更清晰的数学表示，这里将原始问题中的一些量进行合并和改写。
-首先将$ \textbf{w} $和$ b $合并成一个新的向量：
-\[ \hat{\mathbf{w}}=\begin{pmatrix}
-\mathbf{w} \\ 
+首先将$ \bm{w} $和$ b $合并成一个新的向量：
+\[ \hat{\bm{w}}=\begin{pmatrix}
+\bm{w} \\ 
 b
 \end{pmatrix}  \]
-同时把数据集$ D $表示为一个$ m\times(d+1) $大小的矩阵$ \bf{X} $，其中每一行对应一个实例，该行$ d $个元素对应实例的$ d $个属性值，最后一个元素恒为1：
+同时把数据集$ D $表示为一个$ m\times(d+1) $大小的矩阵$ \bm{X} $，其中每一行对应一个实例，该行$ d $个元素对应实例的$ d $个属性值，最后一个元素恒为1：
 \[ 
-\mathbf{X}=
+\bm{X}=
 \begin{pmatrix}
 	x_{11} & x_{12} & \cdots & x_{1d} & 1 \\ 
 	x_{21} & x_{22} & \cdots & x_{2d} & 1 \\ 
 	\vdots & \vdots & \ddots & \vdots & \vdots \\ 
 	x_{m1} & x_{m2} & \cdots & x_{md} & 1
 \end{pmatrix} =\begin{pmatrix}
-\mathbf{x_1}^T & 1 \\ 
-\mathbf{x_2}^T & 1 \\ 
+\bm{x_1}^T & 1 \\ 
+\bm{x_2}^T & 1 \\ 
 \vdots & \vdots \\ 
-\mathbf{x_m}^T & 1
+\bm{x_m}^T & 1
 \end{pmatrix} 
 \]
 同时令：
-\[ \mathbf{y}^T=(y_1,y_2,\cdots,y_m) \]
+\[ \bm{y}^T=(y_1,y_2,\cdots,y_m) \]
 最小二乘法采用平方损失，即： 
-\[ J(\mathbf{\hat{w}})=\left \| \mathbf{X}\mathbf{\hat{w}}-\mathbf{y} \right \|^{2} \]
-当$ \left \| \mathbf{X}\mathbf{\hat{w}}-\mathbf{y} \right \|^{2} $关于$ \hat{\textbf{w}} $的导数\footnote{此处求导后的结果为向量，即梯度。}为$ \textbf{0} $时，损失达到最小。若用矩阵的形式改写这个式子则有： 
-\[ \left \| \mathbf{X}\mathbf{\hat{w}}-\mathbf{y} \right \|^{2}=(\mathbf{X}\mathbf{\hat{w}}-\mathbf{y})^T(\mathbf{X}\mathbf{\hat{w}}-\mathbf{y}) \]
-得到其关于$ \mathbf{\hat{w}} $的导数为： 
-\[ \frac{dJ(\mathbf{\hat{w}})}{d\mathbf{\hat{w}}}=2\textbf{X}^T(\textbf{X}\hat{\textbf{w}}-\textbf{y})=\textbf{0} \]
+\[ J(\bm{\hat{w}})=\left \| \bm{X}\bm{\hat{w}}-\bm{y} \right \|^{2} \]
+当$ \left \| \bm{X}\bm{\hat{w}}-\bm{y} \right \|^{2} $关于$ \hat{\bm{w}} $的导数\footnote{此处求导后的结果为向量，即梯度。}为$ \bm{0} $时，损失达到最小。若用矩阵的形式改写这个式子则有： 
+\[ \left \| \bm{X}\bm{\hat{w}}-\bm{y} \right \|^{2}=(\bm{X}\bm{\hat{w}}-\bm{y})^T(\bm{X}\bm{\hat{w}}-\bm{y}) \]
+得到其关于$ \bm{\hat{w}} $的导数为： 
+\[ \frac{dJ(\bm{\hat{w}})}{d\bm{\hat{w}}}=2\bm{X}^T(\bm{X}\hat{\bm{w}}-\bm{y})=\bm{0} \]
 整理得： 
-\[ \hat{\textbf{w}}=(\textbf{X}^T\textbf{X})^{-1}\textbf{X}^T\textbf{y} \]
-通过矩阵计算就能得到要学得的参数$ \mathbf{\hat{w}} $，但如果输入矩阵$ \textbf{X} $中存在线性相关或者近似线性相关的列，那么输入矩阵$ \textbf{X} $就会变成或者近似变成奇异矩阵（singular matrix）。这是一种病态矩阵，矩阵中任何一个元素发生一点变动，整个矩阵的行列式的值和逆矩阵都会发生巨大变化。这将导致最小二乘法对观测数据的随机误差极为敏感，进而使得最后的线性模型产生非常大的方差，这个在数学上称为多重共线性（multicollinearity）。
+\[ \hat{\bm{w}}=(\bm{X}^T\bm{X})^{-1}\bm{X}^T\bm{y} \]
+通过矩阵计算就能得到要学得的参数$ \bm{\hat{w}} $，但如果输入矩阵$ \bm{X} $中存在线性相关或者近似线性相关的列，那么输入矩阵$ \bm{X} $就会变成或者近似变成奇异矩阵（singular matrix）。这是一种病态矩阵，矩阵中任何一个元素发生一点变动，整个矩阵的行列式的值和逆矩阵都会发生巨大变化。这将导致最小二乘法对观测数据的随机误差极为敏感，进而使得最后的线性模型产生非常大的方差，这个在数学上称为多重共线性（multicollinearity）。
 \subsection{在线学习算法}
 最小二乘法通过计算最后的参数矩阵学得参数，当样本数目非常多的时候，其计算成本会非常的大。故当数据集特别大的时候，这种算法就不再适用，就有一种称为序列学习算法（Ssquential learning），也叫作在线算法（online algorithms）的算法得到了广泛的应用。
 
@@ -57,17 +58,17 @@ b
 
 \paragraph{梯度下降法}
 有前面可以知道，线性回归的损失函数为:
-\[ J(\mathbf{\hat{w}})=\left \| \mathbf{X}\mathbf{\hat{w}}-\mathbf{y} \right \|^{2} \]
-其关于参数$ \mathbf{\hat{w}} $梯度为：
-\[ \nabla J(\mathbf{\hat{w}})=2\textbf{X}^T(\textbf{X}\hat{\textbf{w}}-\textbf{y}) \]
+\[ J(\bm{\hat{w}})=\left \| \bm{X}\bm{\hat{w}}-\bm{y} \right \|^{2} \]
+其关于参数$ \bm{\hat{w}} $梯度为：
+\[ \nabla J(\bm{\hat{w}})=2\bm{X}^T(\bm{X}\hat{\bm{w}}-\bm{y}) \]
 梯度下降法就是：
-\[ \mathbf{\hat{w}}_{k} = \mathbf{\hat{w}}_{k-1}- \eta \nabla J(\mathbf{\hat{w}_{k-1}}) \]
-式中$\eta$为学习率，控制下降的速度，参数$ k $为迭代轮数。通过不停迭代，求得$ \mathbf{\hat{w}}_{k} $。
+\[ \bm{\hat{w}}_{k} = \bm{\hat{w}}_{k-1}- \eta \nabla J(\bm{\hat{w}_{k-1}}) \]
+式中$\eta$为学习率，控制下降的速度，参数$ k $为迭代轮数。通过不停迭代，求得$ \bm{\hat{w}}_{k} $。
 \paragraph{随机梯度下降法}
 不同于上述的梯度下降法，每次迭代都使用了全部的数据集，该算法每次迭代仅仅使用一个样本。该样本从样本集合中随机选取，故名为随机梯度下降法：
-\[\mathbf{\hat{w}}_{k} = \mathbf{\hat{w}}_{k-1}- \eta \nabla\bar{J}(\mathbf{\hat{w}_{k-1}})\]  
-\[\nabla\bar{J}(\mathbf{\hat{w}})=2 \bar{\textbf{x}}_{r}(\bar{\textbf{x}}_{r}^T\mathbf{\hat{w}} - y_{r}) \] 
-式中$\eta$同样为学习率，参数$ k $为迭代轮数。$ \bar{J}(\mathbf{\hat{w}}) $为单样本情况下的损失函数的梯度。由于每次更新只用一个样本更新$ \mathbf{\hat{w}} $，故之前梯度中的矩阵$ \textbf{X} $退化为一个行向量，向量$ \textbf{y} $退化为标量。定义集合$ N=\{1,2,\cdots,m\} $，$ m $为数据集$ D $的样本个数，$ r $从$ N $从中随机选择。$ \bar{\textbf{x}}_{r} $为从矩阵$ \textbf{X} $中选出的第$ r $行的行向量的转置，即$ \bar{\textbf{x}}_{r}=\textbf{X}_{r,*}^T $。同样地，$ y_{r} $也为向量$ \textbf{y} $的第$ r $行的标量。
+\[\bm{\hat{w}}_{k} = \bm{\hat{w}}_{k-1}- \eta \nabla\bar{J}(\bm{\hat{w}_{k-1}})\]  
+\[\nabla\bar{J}(\bm{\hat{w}})=2 \bar{\bm{x}}_{r}(\bar{\bm{x}}_{r}^T\bm{\hat{w}} - y_{r}) \] 
+式中$\eta$同样为学习率，参数$ k $为迭代轮数。$ \bar{J}(\bm{\hat{w}}) $为单样本情况下的损失函数的梯度。由于每次更新只用一个样本更新$ \bm{\hat{w}} $，故之前梯度中的矩阵$ \bm{X} $退化为一个行向量，向量$ \bm{y} $退化为标量。定义集合$ N=\{1,2,\cdots,m\} $，$ m $为数据集$ D $的样本个数，$ r $从$ N $从中随机选择。$ \bar{\bm{x}}_{r} $为从矩阵$ \bm{X} $中选出的第$ r $行的行向量的转置，即$ \bar{\bm{x}}_{r}=\bm{X}_{r,*}^T $。同样地，$ y_{r} $也为向量$ \bm{y} $的第$ r $行的标量。
 \section{总结}
 线性回归是一种形式简洁，用途广泛的模型。本文论述了该模型的两种学习算法：最小二乘法及随机梯度下降法。最小二乘法利用最小化平方损失来优化参数，最终可以归结为一系列矩阵运算从而求得模型参数。随机梯度下降法使用最小二乘法提出的损失函数的梯度进行迭代式的数值运算，同时还使用随机选择样本对总体样本进行近似，降低了运算规模，适合大规模数据下的模型学习。
 
