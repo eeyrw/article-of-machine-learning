@@ -4,7 +4,7 @@
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{graphicx}
-\usepackage[left=2.70cm, right=2.70cm, top=2.70cm, bottom=2.70cm]{geometry}
+\usepackage[left=3.0cm, right=3.0cm, top=3.5cm, bottom=2.70cm]{geometry}
 \title{线性回归的学习研究}
 \author{Yuan}
 \date{\today}
@@ -68,6 +68,7 @@ b
 \[\mathbf{\hat{w}}_{k} = \mathbf{\hat{w}}_{k-1}- \eta \nabla\bar{J}(\mathbf{\hat{w}_{k-1}})\]  
 \[\nabla\bar{J}(\mathbf{\hat{w}})=2 \bar{\textbf{x}}_{r}(\bar{\textbf{x}}_{r}^T\mathbf{\hat{w}} - y_{r}) \] 
 式中$\eta$同样为学习率，参数$ k $为迭代轮数。$ \bar{J}(\mathbf{\hat{w}}) $为单样本情况下的损失函数的梯度。由于每次更新只用一个样本更新$ \mathbf{\hat{w}} $，故之前梯度中的矩阵$ \textbf{X} $退化为一个行向量，向量$ \textbf{y} $退化为标量。定义集合$ N=\{1,2,\cdots,m\} $，$ m $为数据集$ D $的样本个数，$ r $从$ N $从中随机选择。$ \bar{\textbf{x}}_{r} $为从矩阵$ \textbf{X} $中选出的第$ r $行的行向量的转置，即$ \bar{\textbf{x}}_{r}=\textbf{X}_{r,*}^T $。同样地，$ y_{r} $也为向量$ \textbf{y} $的第$ r $行的标量。
-
+\section{总结}
+线性回归是一种形式简洁，用途广泛的模型。本文论述了该模型的两种学习算法：最小二乘法及随机梯度下降法。最小二乘法利用最小化平方损失来优化参数，最终可以归结为一系列矩阵运算从而求得模型参数。随机梯度下降法使用最小二乘法提出的损失函数的梯度进行迭代式的数值运算，同时还使用随机选择样本对总体样本进行近似，降低了运算规模，适合大规模数据下的模型学习。
 
 \end{document}
